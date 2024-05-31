@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  
+  <!-- Alpine Core -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  
+  <title>Suspeito</title>
+</head>
+<body>
+  <div
+    class="p-3"
+    x-data="{
+      groups: [
+        {
+          name: 'Suspeito',
+          items: [
+            { name: 'Motorista', checked: false },
+            { name: 'Empregada', checked: false },
+            { name: 'Mordomo', checked: false },
+            { name: 'Cozinheiro', checked: false },
+            { name: 'Esposa', checked: false },
+            { name: 'Jardineiro', checked: false }
+          ]
+        },
+        {
+          name: 'Arma',
+          items: [
+            { name: 'Veneno', checked: false },
+            { name: 'Abajur', checked: false },
+            { name: 'Revólver', checked: false },
+            { name: 'Faca', checked: false },
+            { name: 'Tesoura de Poda', checked: false },
+            { name: 'Chave de Boca', checked: false },
+            { name: 'Martelo', checked: false }
+          ]
+        },
+        {
+          name: 'Local',
+          items: [
+            { name: 'Varanda', checked: false },
+            { name: 'Escritório', checked: false },
+            { name: 'Hall Central', checked: false },
+            { name: 'Biblioteca', checked: false },
+            { name: 'Sala de Jantar', checked: false },
+            { name: 'Cozinha', checked: false },
+            { name: 'Banheiro', checked: false },
+            { name: 'Suíte', checked: false },
+            { name: 'Quarto', checked: false },
+            { name: 'Escadaria', checked: false }
+          ]
+        }
+      ],
+      clearGroups() {
+        this.groups.forEach(group => group.items.forEach(item => item.checked = false));
+        localStorage.removeItem('groups');
+      }
+    }"
+    x-init="() => {
+      if(localStorage.getItem('groups')) {
+        groups = JSON.parse(localStorage.getItem('groups'));
+      }
+
+      window.addEventListener('storage', function(event) {
+        if (event.key === 'groups') {
+          groups = JSON.parse(event.newValue);
+        }
+      });
+    }"
+    x-on:change="localStorage.setItem('groups', JSON.stringify(groups))"
+  >
+    <template x-for="group in groups">
+      <div>
+        <h2 x-text="group.name"></h2>
+        <table class="table table-bordered table-hover">
+          <tbody>
+            <template x-for="item in group.items">
+              <tr x-on:click="item.checked = !item.checked; localStorage.setItem('groups', JSON.stringify(groups))">
+                <td x-text="item.name"></td>
+                <td class="text-center">
+                  <input class="form-check-input" type="checkbox" x-model="item.checked">
+                </td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+      </div>
+    </template>
+    <div class="row m-1">
+      <button class="btn btn-danger btn-block" x-on:click="clearGroups()">Limpar</button>
+    </div>
+  </div>
+</body>
+</html>
