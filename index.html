@@ -80,7 +80,7 @@
     <template x-for="group in groups">
       <div>
         <h2 x-text="group.name"></h2>
-        <table class="table table-bordered table-hover">
+        <table class="table table-bordered">
           <tbody>
             <template x-for="item in group.items">
               <tr x-on:click="item.checked = !item.checked; localStorage.setItem('groups', JSON.stringify(groups))">
