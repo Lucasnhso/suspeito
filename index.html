@@ -21,6 +21,7 @@
   <div
     class="p-3"
     x-data="{
+      showModal: false,
       groups: [
         {
           name: 'Suspeito',
@@ -64,6 +65,7 @@
       clearGroups() {
         this.groups.forEach(group => group.items.forEach(item => item.checked = false));
         localStorage.removeItem('groups');
+        showModal = false;
       }
     }"
     x-init="() => {
@@ -97,7 +99,34 @@
       </div>
     </template>
     <div class="row m-1">
-      <button class="btn btn-danger btn-block" x-on:click="clearGroups()">Limpar</button>
+      <button class="btn btn-danger btn-block" x-on:click="showModal = true">Limpar</button>
+      <template x-if="showModal">
+        <div
+          class="modal d-flex align-items-center"
+          style="background-color: rgba(0, 0, 0, 0.5);"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Atenção</h5>
+                <button type="button" class="btn-close" aria-label="Close" x-on:click="showModal = false"></button>
+              </div>
+              <div class="modal-body">
+                Tem certeza que deseja limpar todas as seleções?
+              </div>
+              <div class="modal-footer">
+                <div class="col-5 row">
+                  <button type="button" class="btn btn-secondary btn-block" x-on:click="showModal = false">Cancelar</button>
+                </div>
+                <div class="col-5 row">
+                  <button type="button" class="btn btn-danger btn-block" x-on:click="clearGroups()">Limpar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-backdrop fade show" style="display: block;"></div>
+      </template>
     </div>
   </div>
   <script>
